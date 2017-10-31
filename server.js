@@ -77,13 +77,11 @@ app.get("/saved", function(req, res) {
   });
 });
 
-// A GET request to scrape the echojs website
+// A GET request to scrape website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
   request("https://www.nytimes.com/", function(error, response, html) {
-    // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(html);
-    // Now, we grab every h2 within an article tag, and do the following:
     $("article").each(function(i, element) {
 
       // Save an empty result object
@@ -95,7 +93,6 @@ app.get("/scrape", function(req, res) {
       result.link = $(this).children("h2").children("a").attr("href");
 
       // Using our Article model, create a new entry
-      // This effectively passes the result object to the entry (and the title and link)
       var entry = new Article(result);
 
       // Now, save that entry to the db
